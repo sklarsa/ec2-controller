@@ -125,11 +125,11 @@ ignore:
     - VpcPeeringConnection
     - VpnConnectionRoute
     - VpnConnection
-    - VpnGateway    
+    - VpnGateway
 
 operations:
   AllocateAddress:
-    operation_type: 
+    operation_type:
     - Create
     resource_name: ElasticIPAddress
   DescribeAddresses:
@@ -156,7 +156,7 @@ operations:
     resource_name: FlowLog
   DeleteFlowLogs:
     operation_type:
-    - Delete 
+    - Delete
     resource_name: FlowLog
   RunInstances:
     #ouput shape: Reservation
@@ -165,12 +165,12 @@ operations:
       - Create
     resource_name: Instance
     override_values:
-      # Hard-code MaxCount and MinCount to 1 so the Reservation 
+      # Hard-code MaxCount and MinCount to 1 so the Reservation
       # response can only contain a single instance. This
       # instance will be managed by the Instance controller.
-      # Although RunInstances can handle creating multiple 
+      # Although RunInstances can handle creating multiple
       # instances at once (returning them in a single Reservation),
-      # a Reservation controller does not align with the declarative state model 
+      # a Reservation controller does not align with the declarative state model
       # in Kubernetes because users would not be able to update the underlying instances.
       MaxCount: 1
       MinCount: 1
@@ -230,6 +230,8 @@ resources:
   Instance:
     fields:
       HibernationOptions:
+        late_initialize: {}
+      NetworkInterfaces:
         late_initialize: {}
       InstanceID:
         print:
@@ -578,7 +580,7 @@ resources:
             NetworkAclId: Id
         ReplaceNetworkAclEntry:
           input_fields:
-            NetworkAclId: Id    
+            NetworkAclId: Id
     hooks:
       delta_pre_compare:
         code: compareTags(delta, a, b)
@@ -774,4 +776,3 @@ resources:
         template_path: hooks/vpc_endpoint/sdk_file_end.go.tpl
     update_operation:
       custom_method_name: customUpdateVPCEndpoint
-    
